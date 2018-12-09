@@ -1,18 +1,22 @@
-.SUFFIXES : .c .o
+# Compiler
 CC = gcc
-CFLAGS = -O2 -g
 
-OBJS1 = /server/server.o
-OBJS2 = /client/client.o
-SRCS = $(OBJS1: .o = .c) $(OBJS2: .o = .c)
+# Macros specifying path for compile
+SRC = ./src/
+SERVER = ./bin/server/
+CLIENT = ./bin/client/
 
-all : server client
+# Compile server.c
+server: $(SRC)server.c
+	$(CC) -o $(SERVER)server $(SRC)server.c
 
-server : $(OBJS1)
-	$(CC) -o server $(OBJS1)
+# Compile client.c
+client: $(SRC)client.c
+	$(CC) -o $(CLIENT)client $(SRC)client.c
 
-client : $(OBJS2)
-	$(CC) -o client $(OBJS2)
+all: server client
 
-clean : 
-	rm $(OBJS1) $(OBJS2) /server/server /client/client
+# Clean
+clean:
+	rm $(SERVER)server
+	rm $(CLIENT)client

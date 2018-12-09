@@ -43,18 +43,18 @@ int main(int argc, char *argv[]){
 	addr.sin_addr.s_addr = inet_addr(IP);
 	addr.sin_port = htons(PORT);
 	if(connect(s, (sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR){
-		perror("connect : ");
+		perror("ERROR : connect - ");
 		printf("ERROR : Fail to connect.\n");
 		close(s);
 		return 1;
 	}
 
+	printf("Server Connect!\nIP Address : %s	PORT : %d\n", inet_ntoa(addr.sin_addr), PORT);
 	file_name_len = strlen(buf);
 
-	send(s, buf, file_name_len, 0);
 	file_fd = open(buf, O_RDONLY);
 	if(!file_fd){
-		perror("error : ");
+		perror("ERROR : ");
 		return 1;
 	}
 
@@ -64,9 +64,13 @@ int main(int argc, char *argv[]){
 		read_len = read(file_fd, buf, MAXBUF);
 		send(s, buf, read_len, 0);
 		if(!read_len){
+			printf("Sending Success!\n");
 			break;
 		}
+		printf("%d bytes sended.\n", read_len);
 	}
+
+	close(s);
 
 	return 0;
 }
